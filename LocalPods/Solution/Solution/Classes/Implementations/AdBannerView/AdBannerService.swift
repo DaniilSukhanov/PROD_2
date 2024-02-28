@@ -25,7 +25,6 @@ final class AdBannerService: IAdBannerService {
     // MARK: - IAdBannerService
     
     func loadAdBannerInformation(userId: String, completion: @escaping (Result<BannerInfo, Error>) -> ()) {
-        // --TODO--
         let request = Request(baseUrl: .baseURL, methodPath: "/banner", queryParams: ["userId": userId])
         networkService.load(request: request) { result in
             do {

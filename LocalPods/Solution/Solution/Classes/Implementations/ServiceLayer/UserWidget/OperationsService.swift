@@ -41,7 +41,6 @@ final class OperationsService: IOperationsService {
     }
 
     func currentAccount(for userId: String, _ completion: @escaping ([Operation]) -> ()) {
-        // --TODO--
         let operationsCache = storage.fetch(OperationCache.self)
         if !operationsCache.isEmpty {
             OperationsService.logger.info("fetch operations from cache")
