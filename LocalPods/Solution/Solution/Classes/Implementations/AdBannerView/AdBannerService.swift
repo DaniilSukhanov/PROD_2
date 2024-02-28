@@ -9,6 +9,18 @@ import Foundation
 import ProdMobileCore
 import OSLog
 
+struct Request: IRequest {
+    var baseUrl: String
+    
+    var methodPath: String
+    
+    var queryParams: [String : String]
+}
+
+extension String {
+    static let baseURL = "https://prodcontest-ios.ru"
+}
+
 public protocol IAdBannerService: AnyObject {
     func loadAdBannerInformation(userId: String, completion: @escaping (Result<BannerInfo, Error>) -> ())
 }

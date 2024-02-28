@@ -10,15 +10,6 @@ import ProdMobileCore
 
 extension String {
     static let currentUserId = "user312"
-    static let baseURL = "https://prodcontest-ios.ru"
-}
-
-struct Request: IRequest {
-    var baseUrl: String
-    
-    var methodPath: String
-    
-    var queryParams: [String : String]
 }
 
 public final class ProdAppAssembly {
