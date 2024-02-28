@@ -42,6 +42,7 @@ final class FavoritesManager: IFavoritesManager {
 
     var favorites: [String] {
         // --TODO--
+        [""]
     }
     
     var favoritesCount: Int {
