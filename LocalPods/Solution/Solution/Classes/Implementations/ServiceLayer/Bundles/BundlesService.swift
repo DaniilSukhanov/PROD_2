@@ -19,7 +19,9 @@ public struct SpecialBundle: Identifiable {
 }
 
 extension SpecialBundle: Decodable {
-    
+    enum CodingKeys: String, CodingKey {
+        case code, name, base_color, secondary_color
+    }
 }
 
 public protocol IBundlesService {
@@ -32,7 +34,6 @@ final class BundlesService: IBundlesService {
     private let storage: IPersistenceStorage
     private static let jsonDecoder = {
         let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
     }()
     private static let logger = Logger(subsystem: "BundlesService", category: "Networking")

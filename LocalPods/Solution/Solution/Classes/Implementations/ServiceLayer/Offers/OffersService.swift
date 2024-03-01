@@ -9,6 +9,14 @@ import Foundation
 import ProdMobileCore
 import OSLog
 
+fileprivate struct WrapperOfferInfo<Object: Decodable>: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case objectDetails = "objectDetails"
+    }
+    
+    let objectDetails: Object
+}
+
 fileprivate struct Description: Decodable {
     let short: String
 }
@@ -104,7 +112,10 @@ struct Supplier {
 }
 
 extension Supplier: Decodable {
-    
+    enum CodingKeys: String, CodingKey {
+        case name
+        case baseColor = "base_color"
+    }
 }
 
 enum OfferRestriction {
@@ -174,7 +185,6 @@ final class OffersService: IOffersService {
     private let storage: IPersistenceStorage
     private static let jsonDecoder = {
         let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
     }()
     private static let logger = Logger(subsystem: "OffersService", category: "Networking")
@@ -193,11 +203,11 @@ final class OffersService: IOffersService {
         networkingService.load(request: request) { result in
             do {
                 let data = try result.get()
-                let shortInfos = try OffersService.jsonDecoder.decode([OfferShortInfo].self, from: data)
+                let shortInfos = try OffersService.jsonDecoder.decode([WrapperOfferInfo<OfferShortInfo>].self, from: data)
                 OffersService.logger.info("get array OfferShortInfo from networking")
-                completion(shortInfos)
+                completion(shortInfos.map { $0.objectDetails })
             } catch {
-                OffersService.logger.error("unknown error: \(error.localizedDescription)")
+                OffersService.logger.error("unknown error: \(String(describing: error))")
                 completion([])
             }
         }
@@ -212,11 +222,12 @@ final class OffersService: IOffersService {
         networkingService.load(request: request) { result in
             do {
                 let data = try result.get()
-                let shortInfos = try OffersService.jsonDecoder.decode([OfferShortInfo].self, from: data)
+                
+                let shortInfos = try OffersService.jsonDecoder.decode([WrapperOfferInfo<OfferShortInfo>].self, from: data)
                 OffersService.logger.info("get array OfferShortInfo from networking")
-                completion(shortInfos)
+                completion(shortInfos.map { $0.objectDetails })
             } catch {
-                OffersService.logger.error("unknown error: \(error.localizedDescription)")
+                OffersService.logger.error("unknown error: \(String(describing: error)))")
                 completion([])
             }
         }
@@ -231,11 +242,12 @@ final class OffersService: IOffersService {
         networkingService.load(request: request) { result in
             do {
                 let data = try result.get()
-                let detailInfo = try OffersService.jsonDecoder.decode(OfferFullDetails.self, from: data)
+                
+                let detailInfo = try OffersService.jsonDecoder.decode(WrapperOfferInfo<OfferFullDetails>.self, from: data)
                 OffersService.logger.info("get array OfferFullDetails from networking")
-                completion(detailInfo)
+                completion(detailInfo.objectDetails)
             } catch {
-                OffersService.logger.error("unknown error: \(error.localizedDescription)")
+                OffersService.logger.error("unknown error: \(String(describing: error))")
                 completion(nil)
             }
         }
