@@ -80,11 +80,13 @@ final class FavoritesManager: IFavoritesManager {
     }
     
     private func notifySubscribe() {
-        delegateList.forEach { weakDelegate in
-            guard let delegate = weakDelegate.value else {
-                return
+        DispatchQueue.main.sync {
+            delegateList.forEach { weakDelegate in
+                guard let delegate = weakDelegate.value else {
+                    return
+                }
+                delegate.favoritesDidChanged()
             }
-            delegate.favoritesDidChanged()
         }
     }
 

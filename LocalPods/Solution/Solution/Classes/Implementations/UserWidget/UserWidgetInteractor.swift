@@ -96,7 +96,7 @@ final class UserWidgetInteractor: IUserWidgetInteractor {
             bonusFormatter.numberStyle = .decimal
             bonusFormatter.groupingSeparator = " "
             
-            let stringBonus = "\(bonusFormatter.string(for: bonus)!) баллов"
+            let stringBonus = "\(bonusFormatter.string(for: bonus)!) бал."
             let stringMoney = "\(moneyFormatter.string(for: money)!) ₽"
             
             UserWidgetInteractor.logger.info("create UserViewModel")

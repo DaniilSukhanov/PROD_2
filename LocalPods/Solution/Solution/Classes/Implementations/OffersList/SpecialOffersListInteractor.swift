@@ -108,17 +108,31 @@ final class SpecialOffersListInteractor: ISpecialOffersListInteractor {
             let specialBundle = bundlesUser.filter { $0.code == userInfo.bundleCode }.first
             let filtredOffers = self.offersManager.filter(offers: offers, for: specialBundle)
             let viewModels = filtredOffers.map { offer in
-                var discountValue: String
+                var discountValue: Double, postfixValue: String
                 switch offer.bonus {
                 case .specialPoints(let double):
-                    discountValue = String(double) + " бал."
+                    discountValue = double
+                    postfixValue = " бал."
                 case .cashback(let double):
-                    discountValue = String(double) + " %"
+                    discountValue = double
+                    postfixValue = " %"
                 }
+                if let restriction = offer.restrictions.filter({
+                    switch $0 {
+                    case .forBundles(let bundlesIds, let newValue):
+                        return bundlesIds.contains(userInfo.bundleCode)
+                    }
+                }).first {
+                    switch restriction {
+                    case .forBundles(let bundlesIds, let newValue):
+                        discountValue = newValue
+                    }
+                }
+                
                 var viewModel: SpecialOfferViewModel
                 viewModel = SpecialOfferViewModel(
                     title: offer.supplier.name,
-                    discountValue: discountValue,
+                    discountValue: String(discountValue) + postfixValue,
                     description: offer.shortDescription,
                     bundleName: specialBundle?.name,
                     bundleBaseColor: specialBundle?.base_color == nil ? nil : UIColor(hexString: specialBundle!.base_color),
@@ -127,7 +141,7 @@ final class SpecialOffersListInteractor: ISpecialOffersListInteractor {
                     backgroundColor: UIColor(hexString: offer.supplier.baseColor)!,
                     isFavorite: self.favoritesManager.favorites.contains(offer.id),
                     onTap: {
-                        #warning ("TODO: do something on Tap")
+                        self.router?.show(controller: self.offerDetailsAssembly.assemble(userId: userId, offerId: offer.id))
                     },
                     favouriteTap: {
                         SpecialOffersListInteractor.logger.info("favouriteTap")
@@ -143,8 +157,6 @@ final class SpecialOffersListInteractor: ISpecialOffersListInteractor {
             SpecialOffersListInteractor.logger.info("create viewModels (amount \(viewModels.count))")
             completion(viewModels)
         }
-        
-        
     }
 }
 
