@@ -98,7 +98,7 @@ final class UserWidgetInteractor: IUserWidgetInteractor {
             UserWidgetInteractor.logger.info("create UserViewModel")
             completion(
                 UserViewModel(
-                    name: userInfo.name,
+                    name: "\(userInfo.name) \(userInfo.surname)",
                     bonusValue: stringBonus,
                     moneyValue: stringMoney
                 )
