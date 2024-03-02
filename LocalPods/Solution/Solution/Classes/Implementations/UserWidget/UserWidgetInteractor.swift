@@ -32,28 +32,24 @@ final class UserWidgetInteractor: IUserWidgetInteractor {
         
         group.enter()
         operationsService.currentAccount(for: userId) { result in
-            defer {
-                group.leave()
-            }
             if isFirstCallOperationService {
                 isFirstCallOperationService = false
             } else {
-                group.enter()
+                return
             }
             operations = result
+            group.leave()
             
         }
         group.enter()
         userInfoService.userInfo(for: userId) { result in
-            defer {
-                group.leave()
-            }
             if isFirstCallUserInfoService {
                 isFirstCallUserInfoService = false
             } else {
-                group.enter()
+               return
             }
             userInfo = result
+            group.leave()
         }
         
         group.notify(queue: .main) {

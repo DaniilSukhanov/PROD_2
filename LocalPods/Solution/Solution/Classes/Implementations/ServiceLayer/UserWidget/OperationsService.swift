@@ -66,7 +66,8 @@ final class OperationsService: IOperationsService {
                     return
                 }
                 var result = [Operation]()
-                for jsonOperation in operations {
+                for item in operations.enumerated() {
+                    let jsonOperation = item.element
                     guard let tupleOperation = OperationsService.decodeOperation(operation: jsonOperation) else {
                         OperationsService.logger.error("Not decode operation: \(jsonOperation)")
                         continue
@@ -78,7 +79,7 @@ final class OperationsService: IOperationsService {
                         continue
                     }
                     result.append(operation)
-                    self?.storage.save(OperationCache(identifier: UUID().uuidString, operation: operation))
+                    self?.storage.save(OperationCache(identifier: String(item.offset), operation: operation))
                 }
                 OperationsService.logger.info("send operations from networking")
                 completion(result)

@@ -73,7 +73,6 @@ private extension PromocodeView {
             title.topAnchor.constraint(equalTo: topAnchor, constant: 11),
             
             image.heightAnchor.constraint(equalToConstant: 17),
-            image.widthAnchor.constraint(equalToConstant: 17),
             image.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -11),
             image.topAnchor.constraint(equalTo: topAnchor, constant: 11),
             image.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
