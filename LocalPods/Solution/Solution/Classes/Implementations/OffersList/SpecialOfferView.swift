@@ -189,12 +189,18 @@ private extension SpecialOfferView {
         bundleNameView.layer.borderColor = UIColor.black.cgColor
         bundleNameView.layer.borderWidth = 1
         bundleNameView.textColor = viewModel.bundleSecondaryColor
+        if viewModel.bundleName == nil {
+            bundleNameView.isHidden = true
+        }
     }
     
     func setupBundleDescriptionView(_ viewModel: SpecialOfferViewModel) {
         bundleDescriptionView.text = "Предлоджение специально для вас"
         bundleDescriptionView.font = .systemFont(ofSize: 8, weight: .medium)
         bundleDescriptionView.textColor = UIColor(hexString: "9A9A9A")
+        if viewModel.bundleName == nil {
+            bundleDescriptionView.isHidden = true
+        }
     }
     
     func setupButtonFavorite(_ viewModel: SpecialOfferViewModel) {
@@ -231,7 +237,6 @@ private extension SpecialOfferView {
                 onTap: viewModel.onTap,
                 favouriteTap: viewModel.favouriteTap
             )
-            print(newViewModel.isFavorite)
             self?.viewModel = newViewModel
             if newViewModel.isFavorite {
                 self?.buttonFavorite.setImage(UIImage(systemName: "heart.fill"), for: .normal)
