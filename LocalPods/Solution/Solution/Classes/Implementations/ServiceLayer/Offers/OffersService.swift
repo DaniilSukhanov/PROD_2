@@ -243,9 +243,9 @@ final class OffersService: IOffersService {
             do {
                 let data = try result.get()
                 
-                let detailInfo = try OffersService.jsonDecoder.decode(WrapperOfferInfo<OfferFullDetails>.self, from: data)
+                let detailInfo = try OffersService.jsonDecoder.decode(OfferFullDetails.self, from: data)
                 OffersService.logger.info("get array OfferFullDetails from networking")
-                completion(detailInfo.objectDetails)
+                completion(detailInfo)
             } catch {
                 OffersService.logger.error("unknown error: \(String(describing: error))")
                 completion(nil)

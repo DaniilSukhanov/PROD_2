@@ -7,6 +7,7 @@
 
 import Foundation
 import ProdMobileCore
+import OSLog
 
 public protocol IFavoritesDelegate: AnyObject {
     func favoritesDidChanged()
@@ -35,14 +36,14 @@ final class FavoritesManager: IFavoritesManager {
     private var delegateList: [WeakFavoritesDelegate] = []
     private let storage: IPersistenceStorage
     private let dataBaseQueue = DispatchQueue(label: "storage", qos: .default)
+    private static let logger = Logger(subsystem: "FavoritesManager", category: "Logic")
 
     init(storage: IPersistenceStorage) {
         self.storage = storage
     }
 
     var favorites: [String] {
-        // --TODO--
-        [""]
+        return storage.fetch(FavoritesModel.self).map { $0.identifier }
     }
     
     var favoritesCount: Int {
@@ -50,15 +51,43 @@ final class FavoritesManager: IFavoritesManager {
     }
 
     func subscribe(_ delegate: IFavoritesDelegate) {
-        // --TODO--
+        let weakDelegate = WeakFavoritesDelegate(delegate)
+        delegateList.append(weakDelegate)
     }
 
     func likeOffer(with id: String) {
-        // --TODO--
+        dataBaseQueue.async { [weak self] in
+            guard let self else {
+                FavoritesManager.logger.warning("self is weak")
+                return
+            }
+            FavoritesManager.logger.info("saving FavoritesModel \(id)")
+            self.storage.save(FavoritesModel(identifier: id))
+            notifySubscribe()
+        }
     }
 
     func unlikeOffer(with id: String) {
-        // --TODO--
+        dataBaseQueue.async { [weak self] in
+            guard let self else {
+                FavoritesManager.logger.warning("self is weak")
+                return
+            }
+            FavoritesManager.logger.info("deleting FavoritesModel \(id)")
+            self.storage.delete(FavoritesModel(identifier: id))
+            notifySubscribe()
+        }
+    }
+    
+    private func notifySubscribe() {
+        DispatchQueue.main.sync {
+            delegateList.forEach { weakDelegate in
+                guard let delegate = weakDelegate.value else {
+                    return
+                }
+                delegate.favoritesDidChanged()
+            }
+        }
     }
 
 }
