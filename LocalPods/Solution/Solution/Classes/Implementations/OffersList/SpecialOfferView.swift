@@ -88,10 +88,10 @@ final class SpecialOfferView: UIView, ISpecialOfferView {
         buttonFavorite.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
+            heightAnchor.constraint(equalToConstant: 152),
             
             titleView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             titleView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            titleView.heightAnchor.constraint(equalToConstant: 16),
             
             textValueView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             textValueView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
@@ -104,12 +104,12 @@ final class SpecialOfferView: UIView, ISpecialOfferView {
             textDescriptionView.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 14),
             textDescriptionView.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 19.5),
             textDescriptionView.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -19.5),
-            textDescriptionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
+            textDescriptionView.trailingAnchor.constraint(equalTo: borderView.trailingAnchor, constant: -40),
             
             borderView.leadingAnchor.constraint(equalTo: leadingAnchor),
             borderView.topAnchor.constraint(equalTo: topAnchor),
             borderView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            borderView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30),
+            borderView.bottomAnchor.constraint(equalTo: bundleNameView.topAnchor, constant: -7.5),
             
             bundleNameView.topAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 7.5),
             bundleNameView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -7.5),
@@ -171,7 +171,7 @@ private extension SpecialOfferView {
     }
     
     func setupTitleView(_ viewModel: SpecialOfferViewModel) {
-        titleView.font = .systemFont(ofSize: 15, weight: .bold)
+        titleView.font = .systemFont(ofSize: 15, weight: .semibold)
         titleView.text = viewModel.title
     }
     
@@ -195,7 +195,7 @@ private extension SpecialOfferView {
     }
     
     func setupBundleDescriptionView(_ viewModel: SpecialOfferViewModel) {
-        bundleDescriptionView.text = "Предлоджение специально для вас"
+        bundleDescriptionView.text = "Предложение специально для вас"
         bundleDescriptionView.font = .systemFont(ofSize: 8, weight: .medium)
         bundleDescriptionView.textColor = UIColor(hexString: "9A9A9A")
         if viewModel.bundleName == nil {
@@ -208,17 +208,15 @@ private extension SpecialOfferView {
         if viewModel.isFavorite {
             buttonFavorite.setImage(UIImage(systemName: "heart.fill"), for: .normal)
             buttonFavorite.tintColor = .red
-            buttonFavorite.imageView?.contentMode = .scaleAspectFit
         } else {
             buttonFavorite.setImage(UIImage(systemName: "heart"), for: .normal)
             buttonFavorite.tintColor = .tintColor
-            buttonFavorite.imageView?.contentMode = .scaleAspectFit
         }
         buttonFavorite.layer.cornerRadius = buttonFavorite.frame.width/2
         buttonFavorite.clipsToBounds = true
         buttonFavorite.layer.masksToBounds = true
-        
         buttonFavorite.backgroundColor = #colorLiteral(red: 0.850980401, green: 0.850980401, blue: 0.850980401, alpha: 1)
+        buttonFavorite.imageView?.contentMode = .scaleAspectFit
         let action = UIAction { [weak self]  _ in
             viewModel.favouriteTap()
             guard let viewModel = self?.viewModel else {

@@ -66,6 +66,8 @@ final class FavoriteLargeButton: UIView, IFavoriteLargeButton {
         image.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
+            heightAnchor.constraint(equalToConstant: 49),
+            
             titleView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             titleView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -11),
             titleView.topAnchor.constraint(equalTo: topAnchor, constant: 11),
@@ -81,8 +83,9 @@ final class FavoriteLargeButton: UIView, IFavoriteLargeButton {
     
     func setupSelf() {
         backgroundColor = #colorLiteral(red: 0.5774894953, green: 0.8423841596, blue: 0.3632492423, alpha: 1)
-        layer.cornerRadius = 16
         layer.masksToBounds = true
+        clipsToBounds = true
+        layer.cornerRadius = 16
     }
 }
 

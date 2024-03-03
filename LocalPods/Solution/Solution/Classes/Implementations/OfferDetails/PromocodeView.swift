@@ -68,13 +68,13 @@ private extension PromocodeView {
         
         
         NSLayoutConstraint.activate([
+            
             title.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             title.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -11),
             title.topAnchor.constraint(equalTo: topAnchor, constant: 11),
             
             image.heightAnchor.constraint(equalToConstant: 17),
-            image.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -11),
-            image.topAnchor.constraint(equalTo: topAnchor, constant: 11),
+            image.centerYAnchor.constraint(equalTo: centerYAnchor),
             image.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
             
             promocode.trailingAnchor.constraint(equalTo: image.leadingAnchor, constant: -8),
@@ -88,6 +88,7 @@ private extension PromocodeView {
     func setupSelf() {
         backgroundColor = #colorLiteral(red: 0.9215685725, green: 0.9215685725, blue: 0.9215685725, alpha: 1)
         layer.cornerRadius = 12
+        clipsToBounds = true
         layer.masksToBounds = true
     }
 }
