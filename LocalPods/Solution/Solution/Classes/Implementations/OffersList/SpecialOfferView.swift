@@ -124,11 +124,6 @@ final class SpecialOfferView: UIView, ISpecialOfferView {
             bundleBoardNameView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             bundleBoardNameView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -7.5),
             
-            //bundleNameView.topAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 7.5),
-            //bundleNameView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -7.5),
-            //bundleNameView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            //bundleNameView.centerYAnchor.constraint(equalTo: bundleBoardNameView.centerYAnchor),
-            //bundleNameView.centerXAnchor.constraint(equalTo: bundleBoardNameView.centerXAnchor),
             bundleNameView.topAnchor.constraint(equalTo: bundleBoardNameView.topAnchor, constant: 3.5),
             bundleNameView.bottomAnchor.constraint(equalTo: bundleBoardNameView.bottomAnchor, constant: -3.5),
             bundleNameView.leadingAnchor.constraint(equalTo: bundleBoardNameView.leadingAnchor, constant: 14),
@@ -187,10 +182,10 @@ private extension SpecialOfferView {
     }
     
     func setupDescription(_ viewModel: SpecialOfferViewModel) {
-        textDescriptionView.layoutIfNeeded()
         textDescriptionView.font = .systemFont(ofSize: 12, weight: .regular)
         textDescriptionView.text = viewModel.description
         textDescriptionView.numberOfLines = 0
+        textDescriptionView.layoutIfNeeded()
     }
     
     func setupTitleView(_ viewModel: SpecialOfferViewModel) {
@@ -206,20 +201,15 @@ private extension SpecialOfferView {
         bundleBoardNameView.clipsToBounds = false
         bundleBoardNameView.layer.cornerRadius = 7
         bundleBoardNameView.layoutIfNeeded()
+        if viewModel.bundleName == nil {
+            bundleBoardNameView.isHidden = true
+        }
     }
     
     func setupBundleNameView(_ viewModel: SpecialOfferViewModel) {
         bundleNameView.text = viewModel.bundleName
         bundleNameView.font = .systemFont(ofSize: 8, weight: .bold)
         bundleNameView.backgroundColor = .clear
-        //bundleNameView.clipsToBounds = true
-        //bundleNameView.layer.cornerRadius = 7
-        //bundleNameView.paddingTop = 3.5
-        //bundleNameView.paddingLeft = 14
-        //bundleNameView.paddingRight = 14
-        //bundleNameView.paddingBottom = 3.5
-        //bundleNameView.layer.borderColor = UIColor.black.cgColor
-        //bundleNameView.layer.borderWidth = 1
         bundleNameView.textColor = viewModel.bundleSecondaryColor
         if viewModel.bundleName == nil {
             bundleNameView.isHidden = true
@@ -314,40 +304,3 @@ final class SpecialOfferViewTableViewCell: UITableViewCell {
     }
 }
 
-
-class UIPaddingLabel: UILabel {
-    var textEdgeInsets = UIEdgeInsets.zero {
-        didSet { invalidateIntrinsicContentSize() }
-    }
-    
-    open override func textRect(forBounds bounds: CGRect, limitedToNumberOfLines numberOfLines: Int) -> CGRect {
-        let insetRect = bounds.inset(by: textEdgeInsets)
-        let textRect = super.textRect(forBounds: insetRect, limitedToNumberOfLines: numberOfLines)
-        let invertedInsets = UIEdgeInsets(top: -textEdgeInsets.top, left: -textEdgeInsets.left, bottom: -textEdgeInsets.bottom, right: -textEdgeInsets.right)
-        return textRect.inset(by: invertedInsets)
-    }
-    
-    override func drawText(in rect: CGRect) {
-        super.drawText(in: rect.inset(by: textEdgeInsets))
-    }
-    
-    var paddingLeft: CGFloat {
-        set { textEdgeInsets.left = newValue }
-        get { return textEdgeInsets.left }
-    }
-    
-    var paddingRight: CGFloat {
-        set { textEdgeInsets.right = newValue }
-        get { return textEdgeInsets.right }
-    }
-    
-    var paddingTop: CGFloat {
-        set { textEdgeInsets.top = newValue }
-        get { return textEdgeInsets.top }
-    }
-    
-    var paddingBottom: CGFloat {
-        set { textEdgeInsets.bottom = newValue }
-        get { return textEdgeInsets.bottom }
-    }
-}
