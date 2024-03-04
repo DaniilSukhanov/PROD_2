@@ -45,13 +45,18 @@ final class SpecialOfferView: UIView, ISpecialOfferView {
     // --TODO--
     private let textDescriptionView = UILabel()
     private let titleView = UILabel()
-    private let bundleNameView = UIPaddingLabel()
+    private let bundleNameView = UILabel()
     private let bundleDescriptionView = UILabel()
     private let buttonFavorite = UIButton()
     private let textValueView = UILabel()
     private let image = UIImageView()
     private let borderView = UIView()
-    
+    private let imageButtonHeart = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
+    private let bundleBoardNameView = UIView()
     private var viewModel: SpecialOfferViewModel?
     private var isFavorite: Bool = false
     
@@ -80,42 +85,56 @@ final class SpecialOfferView: UIView, ISpecialOfferView {
         titleView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(textValueView)
         textValueView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(bundleNameView)
+        addSubview(bundleBoardNameView)
+        bundleBoardNameView.translatesAutoresizingMaskIntoConstraints = false
+        bundleBoardNameView.addSubview(bundleNameView)
         bundleNameView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(bundleDescriptionView)
         bundleDescriptionView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(buttonFavorite)
         buttonFavorite.translatesAutoresizingMaskIntoConstraints = false
+        buttonFavorite.addSubview(imageButtonHeart)
+        imageButtonHeart.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: 152),
-            
+
             titleView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             titleView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            titleView.trailingAnchor.constraint(equalTo: textValueView.leadingAnchor),
             
             textValueView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             textValueView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             
             image.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            image.topAnchor.constraint(equalTo: titleView.safeAreaLayoutGuide.bottomAnchor),
+            image.topAnchor.constraint(equalTo: titleView.bottomAnchor),
+            image.bottomAnchor.constraint(equalTo: borderView.bottomAnchor),
             image.heightAnchor.constraint(equalToConstant: 86),
             image.widthAnchor.constraint(equalToConstant: 86),
             
             textDescriptionView.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 14),
             textDescriptionView.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 19.5),
             textDescriptionView.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -19.5),
-            textDescriptionView.trailingAnchor.constraint(equalTo: borderView.trailingAnchor, constant: -40),
+            textDescriptionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
             
             borderView.leadingAnchor.constraint(equalTo: leadingAnchor),
             borderView.topAnchor.constraint(equalTo: topAnchor),
             borderView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            borderView.bottomAnchor.constraint(equalTo: bundleNameView.topAnchor, constant: -7.5),
             
-            bundleNameView.topAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 7.5),
-            bundleNameView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -7.5),
-            bundleNameView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            bundleBoardNameView.topAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 7.5),
+            bundleBoardNameView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            bundleBoardNameView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -7.5),
             
-            bundleDescriptionView.leadingAnchor.constraint(equalTo: bundleNameView.trailingAnchor, constant: 10),
+            //bundleNameView.topAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 7.5),
+            //bundleNameView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -7.5),
+            //bundleNameView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            //bundleNameView.centerYAnchor.constraint(equalTo: bundleBoardNameView.centerYAnchor),
+            //bundleNameView.centerXAnchor.constraint(equalTo: bundleBoardNameView.centerXAnchor),
+            bundleNameView.topAnchor.constraint(equalTo: bundleBoardNameView.topAnchor, constant: 3.5),
+            bundleNameView.bottomAnchor.constraint(equalTo: bundleBoardNameView.bottomAnchor, constant: -3.5),
+            bundleNameView.leadingAnchor.constraint(equalTo: bundleBoardNameView.leadingAnchor, constant: 14),
+            bundleNameView.trailingAnchor.constraint(equalTo: bundleBoardNameView.trailingAnchor, constant: -14),
+            
+            bundleDescriptionView.leadingAnchor.constraint(equalTo: bundleBoardNameView.trailingAnchor, constant: 10),
             bundleDescriptionView.topAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 11),
             bundleDescriptionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -11),
         
@@ -124,6 +143,10 @@ final class SpecialOfferView: UIView, ISpecialOfferView {
             buttonFavorite.bottomAnchor.constraint(equalTo: bottomAnchor),
             buttonFavorite.trailingAnchor.constraint(equalTo: trailingAnchor),
             buttonFavorite.topAnchor.constraint(equalTo: borderView.bottomAnchor),
+            
+            imageButtonHeart.heightAnchor.constraint(equalToConstant: 16),
+            imageButtonHeart.centerXAnchor.constraint(equalTo: buttonFavorite.centerXAnchor),
+            imageButtonHeart.centerYAnchor.constraint(equalTo: buttonFavorite.centerYAnchor),
         ])
         setupDescription(viewModel)
         setupTitleView(viewModel)
@@ -134,6 +157,7 @@ final class SpecialOfferView: UIView, ISpecialOfferView {
         setupBoarderView(viewModel)
         setupBundleNameView(viewModel)
         setupSelf(viewModel)
+        setupBundleBoarderNameView(viewModel)
     }
 
     @objc private func updateLike() {
@@ -156,18 +180,17 @@ private extension SpecialOfferView {
     }
     
     func setupSelf(_ viewModel: SpecialOfferViewModel) {
-        layer.cornerRadius = 16
-        clipsToBounds = true
-        layer.masksToBounds = true
         backgroundColor = #colorLiteral(red: 0.9490196109, green: 0.9490196109, blue: 0.9490196109, alpha: 1)
+        layer.masksToBounds = true
+        clipsToBounds = false
+        layer.cornerRadius = 16
     }
     
     func setupDescription(_ viewModel: SpecialOfferViewModel) {
+        textDescriptionView.layoutIfNeeded()
         textDescriptionView.font = .systemFont(ofSize: 12, weight: .regular)
         textDescriptionView.text = viewModel.description
         textDescriptionView.numberOfLines = 0
-        textDescriptionView.textAlignment = .left
-        
     }
     
     func setupTitleView(_ viewModel: SpecialOfferViewModel) {
@@ -175,19 +198,28 @@ private extension SpecialOfferView {
         titleView.text = viewModel.title
     }
     
+    func setupBundleBoarderNameView(_ viewModel: SpecialOfferViewModel) {
+        bundleBoardNameView.backgroundColor = viewModel.bundleBaseColor
+        bundleBoardNameView.layer.borderColor = UIColor.black.cgColor
+        bundleBoardNameView.layer.borderWidth = 1
+        bundleBoardNameView.layer.masksToBounds = true
+        bundleBoardNameView.clipsToBounds = false
+        bundleBoardNameView.layer.cornerRadius = 7
+        bundleBoardNameView.layoutIfNeeded()
+    }
+    
     func setupBundleNameView(_ viewModel: SpecialOfferViewModel) {
         bundleNameView.text = viewModel.bundleName
         bundleNameView.font = .systemFont(ofSize: 8, weight: .bold)
-        bundleNameView.layer.cornerRadius = 7
-        bundleNameView.clipsToBounds = true
-        bundleNameView.layer.masksToBounds = true
-        bundleNameView.backgroundColor = viewModel.bundleBaseColor
-        bundleNameView.paddingTop = 3.5
-        bundleNameView.paddingLeft = 14
-        bundleNameView.paddingRight = 14
-        bundleNameView.paddingBottom = 3.5
-        bundleNameView.layer.borderColor = UIColor.black.cgColor
-        bundleNameView.layer.borderWidth = 1
+        bundleNameView.backgroundColor = .clear
+        //bundleNameView.clipsToBounds = true
+        //bundleNameView.layer.cornerRadius = 7
+        //bundleNameView.paddingTop = 3.5
+        //bundleNameView.paddingLeft = 14
+        //bundleNameView.paddingRight = 14
+        //bundleNameView.paddingBottom = 3.5
+        //bundleNameView.layer.borderColor = UIColor.black.cgColor
+        //bundleNameView.layer.borderWidth = 1
         bundleNameView.textColor = viewModel.bundleSecondaryColor
         if viewModel.bundleName == nil {
             bundleNameView.isHidden = true
@@ -206,17 +238,16 @@ private extension SpecialOfferView {
     func setupButtonFavorite(_ viewModel: SpecialOfferViewModel) {
         buttonFavorite.layoutIfNeeded()
         if viewModel.isFavorite {
-            buttonFavorite.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-            buttonFavorite.tintColor = .red
+            imageButtonHeart.image = UIImage(systemName: "heart.fill")
+            imageButtonHeart.tintColor = .red
         } else {
-            buttonFavorite.setImage(UIImage(systemName: "heart"), for: .normal)
-            buttonFavorite.tintColor = .tintColor
+            imageButtonHeart.image = UIImage(systemName: "heart")
+            imageButtonHeart.tintColor = .tintColor
         }
         buttonFavorite.layer.cornerRadius = buttonFavorite.frame.width/2
         buttonFavorite.clipsToBounds = true
         buttonFavorite.layer.masksToBounds = true
         buttonFavorite.backgroundColor = #colorLiteral(red: 0.850980401, green: 0.850980401, blue: 0.850980401, alpha: 1)
-        buttonFavorite.imageView?.contentMode = .scaleAspectFit
         let action = UIAction { [weak self]  _ in
             viewModel.favouriteTap()
             guard let viewModel = self?.viewModel else {
@@ -237,11 +268,11 @@ private extension SpecialOfferView {
             )
             self?.viewModel = newViewModel
             if newViewModel.isFavorite {
-                self?.buttonFavorite.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                self?.buttonFavorite.tintColor = .red
+                self?.imageButtonHeart.image = UIImage(systemName: "heart.fill")
+                self?.imageButtonHeart.tintColor = .red
             } else {
-                self?.buttonFavorite.setImage(UIImage(systemName: "heart"), for: .normal)
-                self?.buttonFavorite.tintColor = .tintColor
+                self?.imageButtonHeart.image = UIImage(systemName: "heart")
+                self?.imageButtonHeart.tintColor = .tintColor
             }
         }
         buttonFavorite.addAction(action, for: .touchDown)

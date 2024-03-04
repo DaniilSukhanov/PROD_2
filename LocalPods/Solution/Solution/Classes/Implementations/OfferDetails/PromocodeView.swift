@@ -86,9 +86,9 @@ private extension PromocodeView {
     }
     
     func setupSelf() {
-        backgroundColor = #colorLiteral(red: 0.9215685725, green: 0.9215685725, blue: 0.9215685725, alpha: 1)
-        layer.cornerRadius = 12
-        clipsToBounds = true
+        backgroundColor = #colorLiteral(red: 0.9490196109, green: 0.9490196109, blue: 0.9490196109, alpha: 1)
         layer.masksToBounds = true
+        clipsToBounds = false
+        layer.cornerRadius = 12
     }
 }

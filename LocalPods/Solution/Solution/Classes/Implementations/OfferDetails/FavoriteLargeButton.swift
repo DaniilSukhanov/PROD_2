@@ -84,7 +84,7 @@ final class FavoriteLargeButton: UIView, IFavoriteLargeButton {
     func setupSelf() {
         backgroundColor = #colorLiteral(red: 0.5774894953, green: 0.8423841596, blue: 0.3632492423, alpha: 1)
         layer.masksToBounds = true
-        clipsToBounds = true
+        clipsToBounds = false
         layer.cornerRadius = 16
     }
 }
