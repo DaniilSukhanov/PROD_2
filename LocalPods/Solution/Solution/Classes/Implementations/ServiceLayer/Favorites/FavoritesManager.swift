@@ -63,7 +63,7 @@ final class FavoritesManager: IFavoritesManager {
             }
             FavoritesManager.logger.info("saving FavoritesModel \(id)")
             self.storage.save(FavoritesModel(identifier: id))
-            notifySubscribe()
+            self.notifySubscribe()
         }
     }
 
@@ -75,7 +75,7 @@ final class FavoritesManager: IFavoritesManager {
             }
             FavoritesManager.logger.info("deleting FavoritesModel \(id)")
             self.storage.delete(FavoritesModel(identifier: id))
-            notifySubscribe()
+            self.notifySubscribe()
         }
     }
     
